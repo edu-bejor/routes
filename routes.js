@@ -53,6 +53,28 @@ app.get('/queryprice/:ean', function (req, res) {
     });
 });
 
+app.get('/querymarket/:id', function (req, res) {
+    connection.getConnection(function (err, connection) {
+        if (err) {
+            console.error(`MYSQL ERROR: ${err.stack}`);
+            return;
+        }
+        connection.query(`SELECT * FROM tb_market where MARKET_ID=${req.params.id} ;`, (error, results) => {
+            if (error) {
+                console.log(`MYSQL ERROR: ${error}`);
+            } else {
+                if (results.length > 0) {
+                    console.log(results);
+                    res.send(results);
+                } else {
+                    console.log(`Mercado com ID ${req.params.id} não foi encontrado.`);
+                }
+            }
+            console.log("================================");
+        });
+    });
+});
+
 // Iniciando o servidor.
 app.listen(2000, () => {
     let data = new Date();
